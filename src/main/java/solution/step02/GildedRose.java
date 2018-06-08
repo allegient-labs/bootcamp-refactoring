@@ -12,6 +12,21 @@ public class GildedRose {
     }
     
     public void initialize(int quality, int daysRemaining) {
+        switch (name) {
+        case "Normal Item":
+            item = new Normal();
+            break;
+        case "Aged Brie":
+            item = new Brie();
+            break;
+        case "Sulfuras, Hand of Ragnaros":
+            item = new Sulfuras();
+            break;
+        case "Backstage passes to a TAFKAL80ETC concert":
+            item = new BackstagePass();
+            break;
+        }
+
         if (item != null) {
             item.initialize(quality, daysRemaining);
         } else {
@@ -35,43 +50,8 @@ public class GildedRose {
     }
 
     public void tick() {
-        switch (name) {
-        case "Normal Item":
-            normalTick();
-            return;
-        case "Aged Brie":
-            brieTick();
-            return;
-        case "Sulfuras, Hand of Ragnaros":
-            sulfurasTick();
-            return;
-        case "Backstage passes to a TAFKAL80ETC concert":
-            backstageTick();
-            return;
+        if (item != null) {
+            item.tick();
         }
-    }
-    
-    private void normalTick() {
-        item = new Normal();
-        item.initialize(quality, daysRemaining);
-        item.tick();
-    }
-
-    private void brieTick() {
-        item = new Brie();
-        item.initialize(quality, daysRemaining);
-        item.tick();
-    }
-
-    private void sulfurasTick() {
-        item = new Sulfuras();
-        item.initialize(quality, daysRemaining);
-        item.tick();
-    }
-
-    private void backstageTick() {
-        item = new BackstagePass();
-        item.initialize(quality, daysRemaining);
-        item.tick();
     }
 }
