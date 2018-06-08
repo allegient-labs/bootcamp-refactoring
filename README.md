@@ -51,7 +51,7 @@ The idea is to create objects that encapsulate the code contained in the methods
 
 1. Create an interface `Item` with four methods that match the public API of `GildedRose`
 2. Create a `Normal` class that implements `Item`. Copy the code from the `normalTick` method in `GildedRose` to the `tick` method in `Normal`
-3. Change the `initialize` method in `GildedRose` - if the name is "Normal Item", then creat en instance of the `Normal` class and store it. Then forward the parameters to the `initialize` method in the new class you've just created.
+3. Change the `initialize` method in `GildedRose` - if the name is "Normal Item", then create an instance of the `Normal` class and store it. Then forward the parameters to the `initialize` method in the new class you've just created.
 4. Change `getQuality` and `getDaysRemaining` in the `GildedRose` class to delegate to the item instance if there is one, else just return the values as usual.
 5. Change the `tick` method in `GildedRose` to delegate to the item instance if there is one, else call the existing methods.
 6. Repeat steps 2-5 for the remaining items
@@ -77,34 +77,32 @@ At this point the `GildedRose` class is doing two things:
 1. It is an item factory
 2. It is a middleman
 
-This violates two OO principles...
+This violates two OO principles:
 
 1. It violates the "single responsibility" principle
-2. Middleman is an evil code small
+2. Middleman is an evil code smell
 
 We'll fix the single responsibility violation first...
 
 1. Change `GildedRose` so that the constructor takes an `Item` instance. You will no longer need the `name` attribute
 2. Make a new class `GildedRoseFactory`
-3. Move the `forName` method from `GildedRose` to `GildedRoseFactory`. Change its signature to `public static GildedRose forName(String name)`
+3. Move the `forName` method from `GildedRose` to `GildedRoseFactory`. Change it's signature to `public static GildedRose forName(String name)`
 4. Change `GildedRoseTest` to use the factory rather than instantiating a `GildedRose` directly
 
-Break out the factory - leave the middle man (will also have to change the tests)
-
 ## Step 5 - Fix the Middle Man with Inheritance
-`GildedRose` is now a pure middle man and the is a terrible code smell. But our client (the tests) are written to talk to the `GildedRose` API and we don't want to change that.
+`GildedRose` is now a pure middle man and that is a terrible code smell. But our client (the tests) are written to talk to the `GildedRose` API and we don't want to change that.
 
 You have probably also noticed that there is a lot of duplicated code in the various item classes and the only difference is the `tick` method.
 
 We can solve this problem with inheritance. Inheritance is not evil, but it is dangerous and often misused. We want shallow narrow hierarchies. Our current issue is a good use for inheritance.
 
-1. Add `quality` and `daysRemaining` attributes to `GildedRose`. Make them `protected`. Change the `initialize`, `getQuality`, and `getDaysRemaining` methods to use these field directly.
+1. Add `quality` and `daysRemaining` attributes to `GildedRose`. Make them `protected`. Change the `initialize`, `getQuality`, and `getDaysRemaining` methods to use these fields directly.
 2. Remove the `item` instance variable, and change the constructor so that it doesn't accept any parameters
 3. The `tick` method can just be an empty method
 4. Change the four item classes so that they extend `GildedRose` rather than implementing `Item`. Remove all the duplicated code - the `tick` method is all that remains
 5. Delete the `Item` interface
 6. Do you still need the `Sulfuras` class?
-7. Fix the factory so that it creates proper instances in the `GildedRose` hierarchy  
+7. Fix the factory so that it creates proper instances in the `GildedRose` hierarchy
 
 Discussion Notes:
 1. We now have a very clean solution where the single responsibility principle is followed properly and all the classes are small and relatively simple. It's tempting to stop here...
