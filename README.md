@@ -143,7 +143,7 @@ Discussion Points:
 
 ## Step 7 - Implement Conjured 
 
-1. There are 6 tests in `GildedRoseTest` that have the `@Disabled` annotation. Rove the annotation from the tests.
+1. There are 6 tests in `GildedRoseTest` that have the `@Disabled` annotation. Remove the annotation from the tests.
 2. Make a new `Conjured` class
 3. Add the configuration of `Conjured` to the factory
 4. Implement the `tick` method in `Conjured`
@@ -153,6 +153,6 @@ Discussion Points:
 - Prefer duplication over the wrong abstraction
 - Reach for open/closed
 - (Kent Beck) make the change easy (this might be hard), then make the easy change
-- make small things! Objects with a single responsibility
+- Make small things! Small methods and small objects are the key to clean code
 - Embrace SOLID principles - they are the rules of OO design
 - Intermediate refactorings often make code more complicated. Trust the process.
