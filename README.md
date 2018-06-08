@@ -115,16 +115,13 @@ The factory does two things - it figures out what thing to make, and then it mak
 
 ```java
 public class GildedRoseFactory {
-    private static Map<String, Class<?>> specificClasses = new HashMap<>();
-    
-    static {
-        specificClasses.put("Normal Item", Normal.class);
-        specificClasses.put("Aged Brie", Brie.class);
-        specificClasses.put("Backstage passes to a TAFKAL80ETC concert", BackstagePass.class);
-    }
-    
+    private static Map<String, Class<?>> specificClasses = Map.of(
+            "Normal Item", Normal.class,
+            "Aged Brie", Brie.class,
+            "Backstage passes to a TAFKAL80ETC concert", BackstagePass.class);
+
     public static GildedRose forName(String name) {
-        Class<?> clazz = specificClasses.computeIfAbsent(name, s -> GildedRose.class);
+        Class<?> clazz = specificClasses.getOrDefault(name, GildedRose.class);
         try {
             GildedRose gr = (GildedRose) clazz.getDeclaredConstructor().newInstance();
             return gr;
@@ -150,6 +147,7 @@ Discussion Points:
 
 ## Summary
 
+- Test coverage is what allows you to refactor. QED tests are critical.
 - Prefer duplication over the wrong abstraction
 - Reach for open/closed
 - (Kent Beck) make the change easy (this might be hard), then make the easy change
