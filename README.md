@@ -51,11 +51,12 @@ The idea is to create objects that encapsulate the code contained in the methods
 
 1. Create an interface `Item` with four methods that match the public API of `GildedRose`
 2. Create a `Normal` class that implements `Item`. Copy the code from the `normalTick` method in `GildedRose` to the `tick` method in `Normal`
-3. Change the `initialize` method in `GildedRose` - if the name is "Normal Item", then create an instance of the `Normal` class and store it. Then forward the parameters to the `initialize` method in the new class you've just created.
+3. Change the constructor in `GildedRose` - if the name is "Normal Item", then create an instance of the `Normal` class and store it.
 4. Change `getQuality` and `getDaysRemaining` in the `GildedRose` class to delegate to the item instance if there is one, else just return the values as usual.
-5. Change the `tick` method in `GildedRose` to delegate to the item instance if there is one, else call the existing methods.
-6. Repeat steps 2-5 for the remaining items
-7. Now the `tick` method in `GildedRose` should simply forward to the item instance if there is one
+5. Change the `initialize` method in `GildedRose` to delegate to the item instance if there is one, else set the existing values.
+6. Change the `tick` method in `GildedRose` to delegate to the item instance if there is one, else call the existing methods.
+7. Repeat steps 2-3 for the remaining items
+8. Now all the public API methods in `GildedRose` should simply forward to the item instance if there is one
 
 Discussion Points:
 1. The tests have continued to pass during all the intermediate steps. This is the reason for all the overhead we've introduced.
@@ -64,8 +65,8 @@ Discussion Points:
 ## Step 3 - Code Cleanup           
 Now we've got a lot of unnecessary code. Let's clean it up.
 
-1. You will now have an item in every case, so remove the `quality` and `daysRemaining` attributes from `GildedRose` and simply forward all public API methods to the item instance.
-2. Move the `switch` statement out of the `initialize` method...make a new method `private Item forName(String name)` that will return the proper item instance for each name. Call this new method in the `initialize` method
+1. You will now have an item in every case, so remove the `name`, `quality` and `daysRemaining` attributes from `GildedRose` and simply forward all public API methods to the item instance.
+2. Move the `switch` statement out of the constructor...make a new method `private Item forName(String name)` that will return the proper item instance for each name. Call this new method in the constructor
 
 Discussion Points:
 1. The code in `GildedRose` should now be very clear and easy to understand. We can now see that `GildedRose` has become a middleman
@@ -84,7 +85,7 @@ This violates two OO principles:
 
 We'll fix the single responsibility violation first...
 
-1. Change `GildedRose` so that the constructor takes an `Item` instance. You will no longer need the `name` attribute
+1. Change `GildedRose` so that the constructor takes an `Item` instance
 2. Make a new class `GildedRoseFactory`
 3. Move the `forName` method from `GildedRose` to `GildedRoseFactory`. Change it's signature to `public static GildedRose forName(String name)`
 4. Change `GildedRoseTest` to use the factory rather than instantiating a `GildedRose` directly
@@ -109,7 +110,7 @@ Discussion Notes:
 2. The factory is not really open/closed 
 
 ## Step 6 - Separate Configuration from Business Logic
-The factory does two things - it figures out what thing to make, and then it makes it. We can separate these two things so that it will be easier to extend in the future. Here's how the factory can change:
+The factory does two things - it figures out what thing to make, and then it makes the thing. We can separate these two concerns so that it will be easier to extend in the future. Here's how the factory can change:
 
 ```java
 public class GildedRoseFactory {

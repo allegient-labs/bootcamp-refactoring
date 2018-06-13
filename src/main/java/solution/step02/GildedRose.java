@@ -1,17 +1,12 @@
 package solution.step02;
 
 public class GildedRose {
-    private String name;
     protected int quality;
     protected int daysRemaining;
     
     private Item item;
     
     public GildedRose(String name) {
-        this.name = name;
-    }
-    
-    public void initialize(int quality, int daysRemaining) {
         switch (name) {
         case "Normal Item":
             item = new Normal();
@@ -26,7 +21,9 @@ public class GildedRose {
             item = new BackstagePass();
             break;
         }
-
+    }
+    
+    public void initialize(int quality, int daysRemaining) {
         if (item != null) {
             item.initialize(quality, daysRemaining);
         } else {

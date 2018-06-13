@@ -1,16 +1,13 @@
 package solution.step03;
 
 public class GildedRose {
-    private String name;
-    
     private Item item;
     
     public GildedRose(String name) {
-        this.name = name;
+        item = forName(name);
     }
     
     public void initialize(int quality, int daysRemaining) {
-        item = forName(name);
         item.initialize(quality, daysRemaining);
     }
 
